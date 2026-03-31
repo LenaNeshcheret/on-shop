@@ -1,0 +1,14 @@
+@startuml
+hide footbox
+actor Client
+participant "edge-api" as Edge
+participant "search-service" as Search
+database "Elasticsearch" as Elastic
+
+Client -> Edge: GET /search?q=phone
+Edge -> Search: search(query, filters, sort, page)
+Search -> Elastic: query index
+Elastic --> Search: hits + facets + scores
+Search --> Edge: api response
+Edge --> Client: search results
+@enduml

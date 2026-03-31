@@ -1,0 +1,112 @@
+import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+plugins {
+    id 'base'
+    id 'org.springframework.boot' version '4.0.3' apply false
+}
+
+group = 'com.onshop'
+version = '0.1.0-SNAPSHOT'
+
+ext {
+    javaVersion = 25
+    junitBomVersion = '5.12.2'
+}
+
+def configureJavaProject = { Project project ->
+    def javaExtension = project.extensions.getByType(JavaPluginExtension)
+    javaExtension.toolchain.languageVersion = JavaLanguageVersion.of(rootProject.ext.javaVersion as Integer)
+    javaExtension.withSourcesJar()
+
+    project.tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+
+    project.tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+}
+
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
+}
+
+configure(subprojects.findAll { it.path.endsWith(':api') }) {
+    apply plugin: 'java-library'
+
+    configureJavaProject(delegate as Project)
+
+    dependencies {
+        testImplementation platform("org.junit:junit-bom:${rootProject.ext.junitBomVersion}")
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
+}
+
+configure(subprojects.findAll { it.path.endsWith(':app') }) {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+
+    configureJavaProject(delegate as Project)
+
+    dependencies {
+        implementation project(path.replace(':app', ':api'))
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.named('jar') {
+        enabled = false
+    }
+}
+
+tasks.register('verifyServiceApiBoundaries') {
+    group = 'verification'
+    description = 'Ensures service modules depend only on api submodules of other services.'
+
+    doLast {
+        def violations = []
+
+        rootProject.subprojects
+            .findAll { it.path.startsWith(':services:') }
+            .each { Project project ->
+                boolean apiModule = project.path.endsWith(':api')
+                boolean appModule = project.path.endsWith(':app')
+
+                if (!apiModule && !appModule) {
+                    return
+                }
+
+                project.configurations.each { configuration ->
+                    configuration.dependencies
+                        .withType(ProjectDependency)
+                        .each { dependency ->
+                            def dependencyPath = dependency.path
+
+                            if (dependencyPath.startsWith(':services:') && !dependencyPath.endsWith(':api')) {
+                                violations << "${project.path} -> ${configuration.name} -> ${dependencyPath}"
+                            }
+                        }
+                }
+            }
+
+        if (!violations.isEmpty()) {
+            throw new GradleException(
+                "Service dependency rule violated. Only :api modules may be used across services:\n - " +
+                    violations.join('\n - ')
+            )
+        }
+    }
+}
+
+subprojects {
+    tasks.matching { it.name == 'check' }.configureEach {
+        dependsOn(rootProject.tasks.named('verifyServiceApiBoundaries'))
+    }
+}

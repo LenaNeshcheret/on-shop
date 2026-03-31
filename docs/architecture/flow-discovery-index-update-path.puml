@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+rectangle "catalog-service" as Catalog
+rectangle "pricing-service" as Pricing
+rectangle "inventory-service" as Inventory
+queue "Kafka" as Kafka
+rectangle "search-service index consumer" as Search
+database "Elasticsearch" as Elastic
+
+Catalog --> Kafka
+Pricing --> Kafka
+Inventory --> Kafka
+Kafka --> Search
+Search --> Elastic
+@enduml

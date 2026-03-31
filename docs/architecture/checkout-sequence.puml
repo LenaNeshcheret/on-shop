@@ -1,0 +1,42 @@
+@startuml
+title Checkout Flow Centered On checkout-service
+caption Core synchronous path only. Pricing is Go. Kafka side effects happen after the order exists.
+hide footbox
+
+actor "API Client\nmobile / web / partner" as Client
+participant "checkout-service\nworkflow + temp state" as Checkout
+participant "cart-service\nactive cart state" as Cart
+participant "pricing-service\nGo / gRPC quote" as Pricing
+participant "inventory-service\nreserve stock" as Inventory
+participant "payment-service\nauthorize funds" as Payment
+participant "order-service\ndurable order" as Order
+
+Client -> Checkout: 1. POST /checkouts/{id}/place-order
+Checkout -> Cart: 2. load cart snapshot
+Cart --> Checkout: cart lines + selections
+Checkout -> Pricing: 3. gRPC quote(cart, address, coupon)
+Pricing --> Checkout: priced totals + quote expiry
+Checkout -> Inventory: 4. reserve(items)
+Inventory --> Checkout: reservationId + reservation expiry
+Checkout -> Payment: 5. authorize(amount, payment method)
+Payment --> Checkout: authorizationId
+Checkout -> Order: 6. create immutable order from snapshot
+Order --> Checkout: orderId
+Checkout --> Client: 7. 201 Created + orderId
+
+note over Checkout
+Why checkout-service exists:
+it owns short-lived checkout state,
+idempotency, retries, and compensation
+across cart, pricing, inventory, payment,
+and order creation.
+end note
+
+note over Checkout, Order #Fef2f2
+Compensation handled by checkout-service:
+- pricing mismatch: fail before reservation and payment authorization
+- payment failure: release inventory reservation
+- order creation failure after auth:
+  void payment authorization and release reservation
+end note
+@enduml

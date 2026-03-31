@@ -1,0 +1,19 @@
+@startuml
+hide footbox
+actor Client
+participant "order-service" as Order
+queue "Kafka" as Kafka
+participant "fulfillment-service" as Fulfillment
+participant "carrier webhook" as Carrier
+participant "notification-service" as Notification
+
+Order -> Kafka: OrderPlaced
+Kafka -> Fulfillment: consume OrderPlaced
+Fulfillment -> Fulfillment: create shipment and assign warehouse
+Fulfillment -> Kafka: ShipmentCreated
+Carrier -> Fulfillment: tracking status update
+Fulfillment -> Kafka: ShipmentStatusChanged
+Kafka -> Notification: consume shipment event
+Client -> Notification: subscribe via WebSocket
+Notification --> Client: tracking update pushed in real time
+@enduml

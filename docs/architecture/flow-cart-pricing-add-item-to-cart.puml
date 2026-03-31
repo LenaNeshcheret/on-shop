@@ -1,0 +1,14 @@
+@startuml
+hide footbox
+actor Client
+participant "edge-api" as Edge
+participant "cart-service" as Cart
+database "MongoDB" as Mongo
+
+Client -> Edge: POST /cart/items
+Edge -> Cart: addItem(customerId, sku, qty)
+Cart -> Mongo: upsert cart document
+Mongo --> Cart: updated cart
+Cart --> Edge: cart response
+Edge --> Client: cart updated
+@enduml

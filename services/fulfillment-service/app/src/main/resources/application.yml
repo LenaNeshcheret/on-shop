@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: fulfillment-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

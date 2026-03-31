@@ -1,0 +1,34 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'on-shop'
+
+def javaServices = [
+    'edge-api',
+    'customer-service',
+    'catalog-service',
+    'search-service',
+    'cart-service',
+    'inventory-service',
+    'checkout-service',
+    'order-service',
+    'payment-service',
+    'fulfillment-service',
+    'notification-service'
+]
+
+javaServices.each { serviceName ->
+    include("services:${serviceName}:api")
+    include("services:${serviceName}:app")
+}

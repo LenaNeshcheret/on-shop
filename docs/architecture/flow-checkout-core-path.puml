@@ -1,0 +1,23 @@
+@startuml
+hide footbox
+actor Client
+participant "checkout-service" as Checkout
+participant "cart-service" as Cart
+participant "pricing-service" as Pricing
+participant "inventory-service" as Inventory
+participant "payment-service" as Payment
+participant "order-service" as Order
+
+Client -> Checkout: POST /checkouts/{id}/place-order
+Checkout -> Cart: load cart snapshot
+Cart --> Checkout: cart lines
+Checkout -> Pricing: quote(cart, address, coupon)
+Pricing --> Checkout: totals + quote expiry
+Checkout -> Inventory: reserve(items)
+Inventory --> Checkout: reservationId
+Checkout -> Payment: authorize(amount)
+Payment --> Checkout: authorizationId
+Checkout -> Order: create immutable order
+Order --> Checkout: orderId
+Checkout --> Client: 201 Created + orderId
+@enduml

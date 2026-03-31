@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+rectangle "checkout-service" as Checkout
+queue "Kafka" as Kafka
+rectangle "notification-service" as Notification
+rectangle "fulfillment-service" as Fulfillment
+rectangle "analytics / reporting" as Analytics
+
+Checkout --> Kafka
+Kafka --> Notification
+Kafka --> Fulfillment
+Kafka --> Analytics
+@enduml

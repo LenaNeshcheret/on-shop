@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':services:customer-service:api')
+    implementation project(':services:catalog-service:api')
+    implementation project(':services:search-service:api')
+    implementation project(':services:cart-service:api')
+    implementation project(':services:checkout-service:api')
+    implementation project(':services:order-service:api')
+    implementation project(':services:notification-service:api')
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

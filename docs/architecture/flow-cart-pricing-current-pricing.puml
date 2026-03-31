@@ -1,0 +1,14 @@
+@startuml
+hide footbox
+actor Client
+participant "edge-api" as Edge
+participant "cart-service" as Cart
+participant "pricing-service" as Pricing
+
+Client -> Edge: GET /cart
+Edge -> Cart: get cart
+Cart --> Edge: cart lines
+Edge -> Pricing: quote(cart, address, coupon)
+Pricing --> Edge: totals + discounts + quote expiry
+Edge --> Client: cart + current price summary
+@enduml
