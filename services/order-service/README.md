@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: PostgreSQL
-- Primary callers: `edge-api`, `checkout-service`, `fulfillment-service`
+- Primary callers: `api-gateway`, `checkout-service`, `fulfillment-service`
 - Primary downstreams: PostgreSQL, Kafka order events
 - Owns: immutable order snapshots, durable order lifecycle, post-purchase order reads
 - Does not own: cart mutation, repricing orchestration, or payment authorization workflow

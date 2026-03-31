@@ -21,16 +21,16 @@ The root `src` application has been removed on purpose. Runtime code now lives i
 Each Java service is split into two Gradle modules:
 
 - `:services:<service-name>:api`
-- `:services:<service-name>:app`
+- `:services:<service-name>:impl`
 
 Rule:
 
 - one service may depend on another service only through that other service's `:api` module
-- direct dependencies on another service's `:app` module are forbidden by the build
+- direct dependencies on another service's `:impl` module are forbidden by the build
 
 Current Java services:
 
-- `edge-api`
+- `api-gateway`
 - `customer-service`
 - `catalog-service`
 - `search-service`
@@ -61,7 +61,7 @@ Each service directory contains a local `README.md` with a service summary and a
 
 ### Service Responsibilities
 
-- `edge-api`: public REST entrypoint, versioning, auth propagation, request shaping
+- `api-gateway`: public REST entrypoint, versioning, auth propagation, request shaping
 - `customer-service`: profiles, addresses, preferences
 - `catalog-service`: product master data and category-driven attributes
 - `search-service`: search query and indexing logic on the Java side
@@ -137,12 +137,12 @@ on-shop/
 ├── docs/
 │   └── architecture/
 ├── services/
-│   ├── edge-api/
+│   ├── api-gateway/
 │   │   ├── api/
-│   │   └── app/
+│   │   └── impl/
 │   ├── customer-service/
 │   │   ├── api/
-│   │   └── app/
+│   │   └── impl/
 │   ├── ...
 │   └── pricing-service/
 └── gradle/

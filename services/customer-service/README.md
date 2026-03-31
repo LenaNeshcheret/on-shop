@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: PostgreSQL
-- Primary callers: `edge-api`, `checkout-service`, `order-service`
+- Primary callers: `api-gateway`, `checkout-service`, `order-service`
 - Primary downstreams: PostgreSQL
 - Owns: customer profiles, addresses, preferences
 - Does not own: identity-provider credentials or checkout/order workflow state
@@ -18,7 +18,7 @@
 @startuml
 hide footbox
 actor Client
-participant "edge-api" as Edge
+participant "api-gateway" as Edge
 participant "customer-service" as Customer
 database "Postgres" as Pg
 

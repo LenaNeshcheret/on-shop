@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: MongoDB
-- Primary callers: `edge-api`, `checkout-service`
+- Primary callers: `api-gateway`, `checkout-service`
 - Primary downstreams: MongoDB
 - Owns: active cart documents, line selections, saved items
 - Does not own: final pricing decisions, order history, or payment state
@@ -18,7 +18,7 @@
 @startuml
 hide footbox
 actor Client
-participant "edge-api" as Edge
+participant "api-gateway" as Edge
 participant "cart-service" as Cart
 database "MongoDB" as Mongo
 

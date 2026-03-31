@@ -5,7 +5,7 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: PostgreSQL
 - Primary callers: `checkout-service`, finance operations tools
 - Primary downstreams: payment providers, PostgreSQL, Kafka payment events

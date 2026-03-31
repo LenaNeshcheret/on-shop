@@ -5,7 +5,7 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: no primary transactional system of record is defined in this repo layout
 - Primary callers: Kafka event streams, WebSocket clients
 - Primary downstreams: WebSocket clients, email or SMS providers

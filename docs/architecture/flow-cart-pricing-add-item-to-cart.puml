@@ -1,7 +1,7 @@
 @startuml
 hide footbox
 actor Client
-participant "edge-api" as Edge
+participant "api-gateway" as Edge
 participant "cart-service" as Cart
 database "MongoDB" as Mongo
 

@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: Elasticsearch
-- Primary callers: `edge-api`
+- Primary callers: `api-gateway`
 - Primary downstreams: Elasticsearch
 - Consumes: Kafka product, price, and stock events for index updates
 - Owns: search query handling, relevance behavior, index consumer logic
@@ -19,7 +19,7 @@
 @startuml
 hide footbox
 actor Client
-participant "edge-api" as Edge
+participant "api-gateway" as Edge
 participant "search-service" as Search
 database "Elasticsearch" as Elastic
 

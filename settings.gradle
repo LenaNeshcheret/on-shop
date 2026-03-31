@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 rootProject.name = 'on-shop'
 
 def javaServices = [
-    'edge-api',
+    'api-gateway',
     'customer-service',
     'catalog-service',
     'search-service',
@@ -30,5 +30,5 @@ def javaServices = [
 
 javaServices.each { serviceName ->
     include("services:${serviceName}:api")
-    include("services:${serviceName}:app")
+    include("services:${serviceName}:impl")
 }

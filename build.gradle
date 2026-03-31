@@ -47,14 +47,14 @@ configure(subprojects.findAll { it.path.endsWith(':api') }) {
     }
 }
 
-configure(subprojects.findAll { it.path.endsWith(':app') }) {
+configure(subprojects.findAll { it.path.endsWith(':impl') }) {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
 
     configureJavaProject(delegate as Project)
 
     dependencies {
-        implementation project(path.replace(':app', ':api'))
+        implementation project(path.replace(':impl', ':api'))
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -77,9 +77,9 @@ tasks.register('verifyServiceApiBoundaries') {
             .findAll { it.path.startsWith(':services:') }
             .each { Project project ->
                 boolean apiModule = project.path.endsWith(':api')
-                boolean appModule = project.path.endsWith(':app')
+                boolean implModule = project.path.endsWith(':impl')
 
-                if (!apiModule && !appModule) {
+                if (!apiModule && !implModule) {
                     return
                 }
 

@@ -7,7 +7,7 @@ This directory is kept under the same `on-shop` parent so the repository still r
 ## Main Info
 
 - Runtime: Go service planned outside the Java multi-module build
-- Modules: no Gradle `api` or `app` modules; this directory reserves the service boundary in the repository
+- Modules: no Gradle `api` or `impl` modules; this directory reserves the service boundary in the repository
 - Storage: PostgreSQL
 - Primary callers: `checkout-service`, `cart-service`, pricing administration tools
 - Primary downstreams: PostgreSQL, Kafka price events

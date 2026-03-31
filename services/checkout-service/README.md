@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: PostgreSQL
-- Primary callers: `edge-api`
+- Primary callers: `api-gateway`
 - Primary downstreams: `cart-service`, `pricing-service`, `inventory-service`, `payment-service`, `order-service`, Kafka checkout events
 - Owns: checkout attempts or sessions, idempotency state, compensation state, failure reasons
 - Typical lifecycle: `INITIATED`, `PRICED`, `INVENTORY_RESERVED`, `PAYMENT_AUTHORIZED`, `ORDER_CREATED`, `FAILED`, `EXPIRED`
@@ -18,7 +18,7 @@
 ```plantuml
 @startuml
 hide footbox
-participant "edge-api" as Edge
+participant "api-gateway" as Edge
 participant "checkout-service" as Checkout
 participant "cart-service" as Cart
 participant "pricing-service" as Pricing

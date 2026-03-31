@@ -5,9 +5,9 @@
 ## Main Info
 
 - Runtime: Java / Spring Boot
-- Modules: `api` for the public Java contract marker, `app` for the Spring Boot runtime
+- Modules: `api` for the public Java contract marker, `impl` for the Spring Boot runtime
 - Storage: MongoDB
-- Primary callers: `edge-api`, admin or seller tools
+- Primary callers: `api-gateway`, admin or seller tools
 - Primary downstreams: MongoDB, Kafka product events
 - Owns: product master data, category-driven attributes, catalog write flows
 - Does not own: search indexing behavior or pricing truth
